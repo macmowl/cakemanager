@@ -1,5 +1,5 @@
 import dbConnect from '../../../utils/dbConnect';
-import Cake from '../../../models/Cake.model';
+import Admin from '../../../models/Admin.model';
 
 dbConnect()
 
@@ -12,47 +12,47 @@ export default async (req, res) => {
     switch(method) {
         case "GET":
             try {
-                const cake = await Cake.findById(id);
+                const admin = await Admin.findById(id);
 
-                if (!cake) {
+                if (!admin) {
                     return res.status(400).json({
                         success: false,
-                        data: 'Cake not found',
+                        data: 'Admin not found',
                     });
                 }
 
-                res.status(200).json({ success: true, data: cake });
+                res.status(200).json({ success: true, data: admin });
             } catch (error) {
                 res.status(400).json({ success: false });
             }
             break;
         case "PUT":
             try {
-                const cake = await Cake.findByIdAndUpdate(id, req.body, {
+                const admin = await Admin.findByIdAndUpdate(id, req.body, {
                     new: true,
                     runValidators: true,
                 });
 
-                if (!cake) {
+                if (!admin) {
                     return res.status(400).json({
                         success: false,
-                        data: 'Cake not found',
+                        data: 'Admin not found',
                     });
                 }
 
-                res.status(200).json({ success: true, data: cake });
+                res.status(200).json({ success: true, data: admin });
             } catch (error) {
                 res.status(400).json({ success: false });
             }
             break;
         case "DELETE":
             try {
-                const deletedCake = await Cake.deleteOne({ _id: id});
+                const deletedAdmin = await Admin.deleteOne({ _id: id});
 
-                if (!deletedCake) {
+                if (!deletedAdmin) {
                     return res.status(400).json({
                         success: false,
-                        data: 'Cake not found',
+                        data: 'Admin not found',
                     });
                 }
                 res.status(200).json({ success: true, data: {} });

@@ -1,52 +1,61 @@
-import { useState } from 'react';
-import Link from 'next/link';
-
-const Index = () => {
-  const [form, setForm] = useState({ email: '', password: ''});
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    })
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert('logged in');
-  };
+import Cake from '../components/Cake-item';
+import CakeInfos from '../components/Cake-infos';
+import { useRouter } from 'next/router';
 
 
-  return (
-    <div className="container text-center flex flex-col h-screen content-center items-center align-end relative border-box bg-gradient-to-r from-green-400 to-blue-500">
-      <div className="absolute sm:relative bottom-0 flex flex-col justify-self-center">
-        <img src='logo.svg' alt="Cake Manager" className="mb-20 sm:mb-10"/>
-        <div className="w-screen bg-gray-50 pb-5 sm:max-w-sm sm:rounded-md ">
-          <form onSubmit={handleSubmit} className="flex flex-col space-y-4 pb-5 px-5">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              name="email"
-              onChange={handleChange}
-              className="p-3 mt-10 rounded-md border-2 border-gray-300"
-            />
-            <input
-              type="password"
-              placeholder="Enter your password"
-              name="password"
-              onChange={handleChange}
-              className="p-3 rounded-md border-2 border-gray-300"
-            />
-            <button type="submit" className="bg-blue-400 p-3 rounded-md text-white">Login</button>
-          </form>
-          <Link href='/'>
-            <a className="text-red-400 underline">Forgot your password?</a>
-          </Link>
-        </div>
-      </div>
-      
-    </div>
-  )
+const cakes = ({ cakes }) => {
+    const router = useRouter();
+
+    const cakesCount = (cakesList) => {
+        let nbrPersons = 0;
+        for (let i = 0; i < cakes.length; i++) {
+            nbrPersons += cakes[i].nbrPersons;
+        }
+        return nbrPersons
+    }
+
+    const handleAdd = (e) => {
+        e.preventDefault();
+        router.push('/cakes/new/client-infos');
+    }
+
+        return (
+            <>
+            <div className="absolute bg-gradient-to-r from-green-400 to-blue-500 header-cakes"></div>
+            <button onClick={handleAdd} className="absolute bottom-4 right-4 font-semibold bg-blue-400 text-white addCake">
+                <img src="/icon_add.svg" alt="add cake" />
+            </button>
+            <div className="container px-5 py-8 flex flex-col justify-self-center">
+                
+                <div className="flex justify-between text-white">
+                    <div>
+                        <h1>Hello, Elrond</h1>
+                        <p className="text-sm font-light">What will you do today?</p>
+                    </div>
+                    <img src="avatar.png" alt="avatar" className="rounded-full border-2 border-white"/>
+                </div>
+                <div className="md:flex md:flex-row md:justify-between">
+                    <CakeInfos cakeNumber={cakes.length} nbrPersons={cakesCount(cakes)} />
+                    <div className="md:mt-4 md:flex-grow md:bg-gray-100">
+                        <Cake cakes={cakes}/>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </>
+        )
 }
 
-export default Index
+export const getServerSideProps = async (ctx) => {
+    const res = await fetch(`${process.env.URI}/api/cakes`);
+    const { data } = await res.json();
+    
+    return {
+      props: {
+        cakes: data
+      }
+    }
+  }
+
+export default cakes

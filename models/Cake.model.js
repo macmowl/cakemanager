@@ -47,6 +47,14 @@ const CakeSchema = new mongoose.Schema({
     },
     updatedAt: {
         type: Date,
+    },
+    creator: {
+        id: {
+            type: mongoose.ObjectId,
+        },
+        username: {
+            type: String
+        }
     }
 });
 

@@ -12,35 +12,35 @@ export default async (req, res) => {
     switch(method) {
         case "GET":
             try {
-                const note = await User.findById(id);
+                const user = await User.findById(id);
 
-                if (!note) {
+                if (!user) {
                     return res.status(400).json({
                         success: false,
                         data: 'User not found',
                     });
                 }
 
-                res.status(200).json({ success: true, data: note });
+                res.status(200).json({ success: true, data: user });
             } catch (error) {
                 res.status(400).json({ success: false });
             }
             break;
         case "PUT":
             try {
-                const note = await User.findByIdAndUpdate(id, req.body, {
+                const user = await User.findByIdAndUpdate(id, req.body, {
                     new: true,
                     runValidators: true,
                 });
 
-                if (!note) {
+                if (!user) {
                     return res.status(400).json({
                         success: false,
                         data: 'User not found',
                     });
                 }
 
-                res.status(200).json({ success: true, data: note });
+                res.status(200).json({ success: true, data: user });
             } catch (error) {
                 res.status(400).json({ success: false });
             }

@@ -1,13 +1,13 @@
-import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Moment from 'react-moment';
-import { getSession, useSession } from 'next-auth/client';
+import Modal from '../../../components/Modal';
+import { useRouter } from 'next/router';
 
-const Cake = ({ cake, client }) => {
-    const [ session, loading ] = useSession();
+const Cake = ({ cake }) => {
     const router = useRouter();
     const [form, setForm] = useState(cake);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         updateCake();
@@ -34,15 +34,34 @@ const Cake = ({ cake, client }) => {
             console.log(error);
         }
     }
-    if (!session) {
-        return (
-            <h1>You are not signed in</h1>
-        )
-    } else {
+
+    const deleteCake = async () => {
+        try {
+            const res = await fetch(`/api/cakes/${cake._id}`, {
+                method: 'DELETE'
+            })
+            router.push('/cakes');
+        } catch (error) {
+            
+        }
+    }
+
         return (
             <>
-                <div className="absolute bg-gradient-to-r from-green-400 to-blue-500 header-cake"></div>
-                <div className="container px-5 py-8 flex flex-col justify-self-center">
+            <div className="absolute bg-gradient-to-r from-green-400 to-blue-500 header-cake"></div>
+            <Modal
+                onClose={() => setShowModal(false)}
+                show={showModal}
+                >
+                    <div className="text-center mt-4">
+                        <p className="text-lg">Delete this cake?</p>
+                        <button onClick={deleteCake} className="rounded-md bg-red-500 text-white h-10 mt-5 flex-shrink-0 w-52">Delete</button>
+                    </div>
+                
+            </Modal>
+            <div className="flex flex-col justify-center">
+                
+                <div className="container px-5 py-8 flex flex-col self-center sm:max-w-sm">
                     <div className="flex justify-between pb-8">
                         <Link href="/cakes">
                             <a className="block p-2 rounded-full border-white border-opacity-20 border-2">
@@ -50,12 +69,10 @@ const Cake = ({ cake, client }) => {
                             </a>
                         </Link>
                         <div className="flex">
-                        <Link href={`/cakes/delete`}>
-                            <a className="block p-2 rounded-full border-white border-opacity-20 border-2"><img src="/icon_delete.svg" alt="Delete this cake" /></a>
-                        </Link>
-                        <Link href={`/cakes/${cake._id}/edit`}>
-                            <a className="block p-2 rounded-full border-white border-opacity-20 border-2 ml-4"><img src="/icon_edit.svg" alt="Edit this cake" /></a>
-                        </Link>
+                            <button onClick={() => setShowModal(true)} className="block p-2 rounded-full border-white border-opacity-20 border-2"><img src="/icon_delete.svg" alt="Delete this cake" /></button>
+                            <Link href={`/cakes/${cake._id}/edit`}>
+                                <a className="block p-2 rounded-full border-white border-opacity-20 border-2 ml-4"><img src="/icon_edit.svg" alt="Edit this cake" /></a>
+                            </Link>
                         </div>
                     </div>
                     <h1 className="text-white text-3xl mb-2">{cake.tastes.join(', ')}</h1>
@@ -95,59 +112,59 @@ const Cake = ({ cake, client }) => {
                         <h2>Client</h2>
                         <div className="flex">
                         <img src="/icon_client_user.svg" alt="Phone's client" className="mr-2"/>
-                            <p className="font-semibold">{client.name}</p>
+                            <p className="font-semibold">{cake.client.name}</p>
                         </div> 
-                        <div className="flex">
-                            <img src="/icon_client_phone.svg" alt="Phone's client" className="mr-2"/>
-                            <p>{client.phone}</p>
-                        </div>
+                        {cake.client.phone
+                            ? <div className="flex">
+                                    <img src="/icon_client_phone.svg" alt="Phone's client" className="mr-2"/>
+                                    <p>{cake.client.phone}</p>
+                                </div>
+                            : null
+                        }
+                        
                         <div className="flex items-start">
                             <img src="/icon_client_location.svg" alt="Adress's client" className="mr-2"/>
                             <div>
-                                <p>{client.adress}</p>
-                                <p>{client.zipCode} - {client.city}</p>
+                            {cake.client.zipCode
+                                ? <p>{cake.client.adress}</p>
+                                : null
+                            }
+                            {cake.client.zipCode
+                                ? <p>{cake.client.zipCode} - {cake.client.city}</p>
+                                : null
+                            }
                             </div>
                         </div>
                         <form>
                             <h2>State</h2>
                             <select
-                                className="w-full h-10 bg-white border border-gray-400"
+                                className="w-full h-10 bg-white border rounded-md px-2 border-gray-400"
                                 onChange={handleChange}
                                 value={form.state}
                             >
-                                <option alue="Not started">Not started</option>
+                                <option value="Not started">Not started</option>
                                 <option value="Mold">Mold</option>
                                 <option value="Done">Done</option>
                                 <option value="Gone">Gone</option>
                             </select>
                         </form>
-                        <p className="text-sm text-gray-400 font-light text-center mt-4">Created on <Moment format="D MMMM YY">{cake.createdAt}</Moment> by Alan</p>
+                        <p className="text-sm text-gray-400 font-light text-center mt-4">Created on <Moment format="D MMMM YY">{cake.createdAt}</Moment> by {cake.creator.username}</p>
                     </div>
                 </div>
                 
+            </div>
             </>
         )
-    }
 }
 
 export const getServerSideProps = async (ctx) => {
-    const session = getSession(ctx);
-
-    if (!session) {
-        return {
-            props: {},
-        }
-    }
+    
     const resCake = await fetch(`${process.env.URI}/api/cakes/${ctx.query.cakeId}`);
     const { data } = await resCake.json();
-    
-    const resClient = await fetch(`${process.env.URI}/api/clients/${data.client.id}`);
-    const client = await resClient.json();
 
     return {
         props: {
             cake: data,
-            client: client.data,
         }
     }
 }

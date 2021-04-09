@@ -1,7 +1,7 @@
 import dbConnect from '../../../utils/dbConnect';
 import Cake from '../../../models/Cake.model';
 
-dbConnect()
+dbConnect();
 
 export default async (req, res) => {
     const {
@@ -12,7 +12,9 @@ export default async (req, res) => {
     switch(method) {
         case "GET":
             try {
-                const cake = await Cake.findById(id);
+                const cake = await Cake.findById(id)
+                    .populate('client')
+                    .populate('creator');
 
                 if (!cake) {
                     return res.status(400).json({

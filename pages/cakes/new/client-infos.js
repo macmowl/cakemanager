@@ -1,6 +1,8 @@
 import Router from 'next/router';
 import { useState } from 'react';
 import NewHeader from '../../../components/new-header';
+import { useSession, getSession } from "next-auth/client";
+import Loading from '../../../components/Loading';
 
 const ClientInfos = () => {
     const [form, setForm] = useState({
@@ -13,6 +15,7 @@ const ClientInfos = () => {
     });
     const [isHidden, setIsHidden] = useState(true);
     const [isNew, setIsNew] = useState(null);
+    const [session, loading] = useSession();
 
     const handleChange = (e) =>  {
         setForm({
@@ -80,7 +83,7 @@ const ClientInfos = () => {
                     'Accept': "application.json",
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({email})
+                body: JSON.stringify(email)
             });
             const { success, data } = await res.json()
             setIsNew(success);
@@ -92,15 +95,18 @@ const ClientInfos = () => {
         }
     }
 
+    if (loading) return <Loading />
+
     return (
-        <div>
+        <div className="flex flex-col justify-center">
             <NewHeader title={'Client Infos'}/>
-            <form onSubmit={handleSubmit} className="container px-5 py-8 flex flex-col justify-self-center">
+            <form onSubmit={handleSubmit} className="container px-5 py-8 flex flex-col self-center sm:max-w-sm">
                     <input
                         type="email"
                         placeholder="Email"
                         name="email"
                         onChange={handleChange}
+                        className="border-gray-400 border"
                     />
                     
                     <div className={isHidden ? 'hidden' : 'block'}>
@@ -114,6 +120,9 @@ const ClientInfos = () => {
                             name="name"
                             onChange={handleChange}
                             value={form.name}
+                            className="border-gray-400 border"
+                            required={!isHidden}
+                            autoFocus={!isHidden}
                         />
                         <input
                             type="text"
@@ -121,14 +130,16 @@ const ClientInfos = () => {
                             name="adress"
                             onChange={handleChange}
                             value={form.adress}
+                            className="border-gray-400 border"
                         />
-                        <div className="flex flex-row">
+                        <div className="flex flex-row space-x-4">
                             <input
                                 type="number"
                                 placeholder="ZIP code"
                                 name="zipCode"
                                 onChange={handleChange}
                                 value={form.zipCode}
+                                className="border-gray-400 border"
                             />
                             <input
                                 type="text"
@@ -136,6 +147,7 @@ const ClientInfos = () => {
                                 name="city"
                                 onChange={handleChange}
                                 value={form.city}
+                                className="border-gray-400 border"
                             />
                         </div>
                         <input
@@ -144,12 +156,27 @@ const ClientInfos = () => {
                             name="phone"
                             onChange={handleChange}
                             value={form.phone}
+                            className="border-gray-400 border"
                         />
                     </div>
                     <button className="rounded-md w-full bg-blue-400 text-white h-10 mt-5">{isHidden ? 'Check if email exists' : 'Save & continue'}</button>
             </form>
         </div>
     )
+}
+
+export const getServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    if(!session) {
+        ctx.res.writeHead(302, { Location: '/'});
+        ctx.res.end()
+        return {}
+    }
+
+    return {
+        props: {}
+    };
 }
 
 export default ClientInfos

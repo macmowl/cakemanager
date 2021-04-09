@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+require('./Client.model');
+require('./Admin.model');
 
 const CakeSchema = new mongoose.Schema({
     nbrPersons: {
@@ -23,12 +25,8 @@ const CakeSchema = new mongoose.Schema({
         type: String,
     },
     client: {
-        id: {
-            type: mongoose.ObjectId,
-        },
-        name: {
-            type: String
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Client'
     },
     state: {
         type: String,
@@ -41,21 +39,10 @@ const CakeSchema = new mongoose.Schema({
     isForDelivery: {
         type: Boolean
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    updatedAt: {
-        type: Date,
-    },
     creator: {
-        id: {
-            type: mongoose.ObjectId,
-        },
-        username: {
-            type: String
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Admin'
     }
-});
+}, {timestamps: true});
 
 module.exports = mongoose.models.Cake || mongoose.model("Cake", CakeSchema);

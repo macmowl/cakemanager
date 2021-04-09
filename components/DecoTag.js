@@ -1,4 +1,4 @@
-const DecoTag = ({ name, id, value, onChange, children }) => {
+const DecoTag = ({ name, id, value, onChange, checked, children }) => {
     return (
         <div>
             <input
@@ -8,6 +8,7 @@ const DecoTag = ({ name, id, value, onChange, children }) => {
                 name={name}
                 onChange={onChange}
                 className="decoCheckbox"
+                checked={checked}
                 />
             <label
                 htmlFor={id}
@@ -17,6 +18,12 @@ const DecoTag = ({ name, id, value, onChange, children }) => {
             </label>
         </div>
     )
+}
+
+DecoTag.defaultProps = {
+    name: 'decoration',
+    id: 'decoration',
+    value: 'decoration',
 }
 
 export default DecoTag

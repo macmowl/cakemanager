@@ -5,24 +5,23 @@ dbConnect();
 
 export default async (req, res) => {
     const { method } = req;
-
+    
     switch(method) {
         case "POST":
             try {
-                const query = await Client.find({email: req.body.email});
+                const query = await Client.find({email: req.body});
                 if(query === 'undefined' || query.length === 0) {
                     return res.status(200).json({
                         success: false,
                         data: [{
                             name: '',
-                            email: req.body.email,
+                            email: req.body,
                             adress: '',
                             zipCode: '',
                             city: '',
                             phone: ''
                         }]});
                 }
-
                 res.status(200).json({ success: true, data: query });
             } catch (error) {
                 res.status(400).json({ success: false, data: error });

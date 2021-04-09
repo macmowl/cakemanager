@@ -5,18 +5,19 @@ import DecoTag from '../../../components/DecoTag';
 import { DECO_TAGS } from '../../../utils/constants';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useSession, getSession } from "next-auth/client";
+import Loading from '../../../components/Loading';
 
 const CakeInfos = ({ client }) => {
+    const [session, loading] = useSession();
     const router = useRouter();
     const [ form, setForm ] = useState({
-        client: {
-            id: client[0]._id,
-            name: client[0].name,
-        }
+        client: client[0]._id,
+        creator: '6050c95e334af27a586baed7'
     });
     const [ nbrPers, setNbrPers ] = useState(0);
     const [ deco, setDeco ] = useState([]);
-    const [ delivery, setDelivery ] = useState({})
+    const [ delivery, setDelivery ] = useState({});
 
     const handleChange = (e) =>  {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -48,7 +49,6 @@ const CakeInfos = ({ client }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("cake created: ", form);
         createCake();
     }
 
@@ -68,10 +68,12 @@ const CakeInfos = ({ client }) => {
         }
     }
 
+    if (loading) return <Loading />
+
     return (
-        <div>
+        <div className="flex flex-col justify-center">
             <NewHeader title={'New cake'}/>
-            <form onSubmit={handleSubmit} className="container px-5 py-8 flex flex-col justify-self-center">
+            <form onSubmit={handleSubmit} className="container px-5 py-8 flex flex-col self-center sm:max-w-sm">
                 <input 
                     type="text"
                     placeholder="Strawberry, Vanilla, Raspberry, ..."
@@ -131,7 +133,7 @@ const CakeInfos = ({ client }) => {
                         onChange={handleChange}
                     ></textarea>
                 </div>
-                <div className="flex flex-row">
+                <div className="flex flex-row space-x-4">
                         <input
                             type="date"
                             placeholder={getToday()}
@@ -155,20 +157,28 @@ const CakeInfos = ({ client }) => {
     )
 }
 
-export const getServerSideProps = async ({query: {email} }) => {
-    const res = await fetch(`${process.env.URI}/api/query`, {
-        method: 'POST',
-        headers: {
-            'Accept': "application.json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({email})
-    });
-    const { data } = await res.json();
-    return {
-        props: {
-            client: data
+export const getServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    if(session) {
+        const res = await fetch(`${process.env.URI}/api/query`, {
+            method: 'POST',
+            headers: {
+                'Accept': "application.json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(ctx.query.email)
+        });
+        const { data } = await res.json();
+        return {
+            props: {
+                client: data
+            }
         }
+    } else {
+        ctx.res.writeHead(302, { Location: '/'});
+        ctx.res.end()
+        return {}
     }
 }
 

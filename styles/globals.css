@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,6 +21,12 @@ h2 {
   font-size: 1.2rem;
   color: #AAA;
   margin-top: 1.2rem;
+}
+
+.logo {
+  font-family: 'Courgette', cursive;
+  font-size: 4rem;
+  color: white;
 }
 
 /* --------- Custom input --------- */

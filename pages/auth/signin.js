@@ -1,7 +1,6 @@
 import { getSession, getCsrfToken } from 'next-auth/client';
 
 const SignIn = ({ csrfToken }) => {
-
   return (
     <div className="container text-center flex flex-col h-screen justify-center items-center align-end relative border-box bg-gradient-to-r from-green-400 to-blue-500">
       <div className="absolute sm:relative sm:flex sm:flex-col sm:justify-center bottom-0 flex flex-col justify-self-center">
@@ -14,10 +13,10 @@ const SignIn = ({ csrfToken }) => {
               defaultValue={csrfToken}
             />
             <input
-              type="email"
-              placeholder="Enter your email"
-              id="email"
-              name="email"
+              type="text"
+              placeholder="Enter your username"
+              id="username"
+              name="username"
               className="p-3 mt-10 rounded-md border-2 border-gray-300"
               required
             />

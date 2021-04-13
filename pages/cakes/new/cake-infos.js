@@ -13,7 +13,7 @@ const CakeInfos = ({ client }) => {
     const router = useRouter();
     const [ form, setForm ] = useState({
         client: client[0]._id,
-        creator: '6050c95e334af27a586baed7'
+        creator: session.user.id
     });
     const [ nbrPers, setNbrPers ] = useState(0);
     const [ deco, setDeco ] = useState([]);
@@ -38,12 +38,13 @@ const CakeInfos = ({ client }) => {
     useEffect(() => {
         const date = delivery.date ? delivery.date : getToday()
         const time = delivery.time ? delivery.time : '14:00'
-        
+        const deliverydate = new Date(`${date} ${time}`)
+        console.log(deliverydate.getTime());
         setForm({
             ...form,
             nbrPersons: nbrPers,
             decoration: deco,
-            deliveryDate: `${date}T${time}:00.228+00:00`
+            deliveryDate: deliverydate.getTime()
         })
     }, [nbrPers, deco, delivery])
 

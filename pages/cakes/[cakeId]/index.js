@@ -8,6 +8,7 @@ const Cake = ({ cake }) => {
     const router = useRouter();
     const [form, setForm] = useState(cake);
     const [showModal, setShowModal] = useState(false);
+    console.log(cake)
 
     useEffect(() => {
         updateCake();
@@ -161,7 +162,7 @@ export const getServerSideProps = async (ctx) => {
     
     const resCake = await fetch(`${process.env.URI}/api/cakes/${ctx.query.cakeId}`);
     const { data } = await resCake.json();
-
+    console.log(data)
     return {
         props: {
             cake: data,

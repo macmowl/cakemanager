@@ -15,7 +15,7 @@ const Cake = ({ cakes }) => {
                                 : null
                             }
                             <p className="text-gray-400 font-light">
-                                <Moment format="D MMMM YY HH:mm">{cake.deliveryDate}</Moment>
+                                <Moment format="D MMMM YY - HH:mm">{cake.deliveryDate}</Moment>
                             </p>
                         </div>
                         

@@ -1,16 +1,16 @@
 import dbConnect from '../../../utils/dbConnect';
 import Cake from '../../../models/Cake.model';
-// import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 
 dbConnect();
 
 export default async (req, res) => {
-    // const session = await getSession({ req });
-    // console.log(session)
+    const session = await getSession( req );
+    console.log('api cakes session: ', session)
     // if(session) {
-            // Insert your content here !!!
+    //         // Insert your content here !!!
     // } else {
-    //     res.status(401).send({ content: 'No access for you bro, sorry'})
+    //     // res.status(401).send({ content: 'No access for you bro, sorry'})
     // }
 
     const { method } = req;
@@ -22,7 +22,12 @@ export default async (req, res) => {
                         .populate('client')
                         .populate('creator');
                     cakes.forEach(cake => {
-                        cake.creator.password = '';
+                        
+                        if (!cake.creator) {
+                            cake.creator = null
+                        } else {
+                            cake.creator.password = '';
+                        }
                     });
                     res.status(200).json({ success: true, data: cakes });
                 } catch (error) {

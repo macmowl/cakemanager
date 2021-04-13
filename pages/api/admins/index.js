@@ -21,15 +21,15 @@ export default async (req, res) => {
             }
             break;
         case "POST":
-            const { email, password } = req.body;
+            const { email, password, username } = req.body;
             const pw = await encryptPw(password);
-            console.log(req.body.password);
             try {
                 const newAdmin = await Admin.create({
                     email,
                     password: pw,
+                    username
                 });
-                res.status(201).json({ success: true, data: newAdmin });
+                res.status(201).json({ success: true, data: admin });
             } catch (err) {
                 let errorHandled = err;
                 if (err.name === "MongoError") errorHandled = DBError(err);

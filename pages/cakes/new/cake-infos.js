@@ -162,7 +162,7 @@ export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
 
     if(session) {
-        const res = await fetch(`https://il-gelato.vercel.app/api/query`, {
+        const res = await fetch(`https://gelatoapp.vercel.app/api/query`, {
             method: 'POST',
             headers: {
                 'Accept': "application.json",

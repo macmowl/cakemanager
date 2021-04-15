@@ -6,7 +6,7 @@ const SignIn = ({ csrfToken }) => {
       <div className="absolute sm:relative sm:flex sm:flex-col sm:justify-center bottom-0 flex flex-col justify-self-center">
         <p className="logo">Gelato</p>
         <div className="w-screen bg-gray-50 py-5 mt-10 sm:max-w-sm sm:rounded-md ">
-          <form method="post" action={`${NEXT_PUBLIC_URI}/api/auth/callback/credentials`} className="flex flex-col space-y-4 pb-5 px-5">
+          <form method="post" action="/api/auth/callback/credentials" className="flex flex-col space-y-4 pb-5 px-5">
             <input 
               name="csrfToken"
               type="hidden"

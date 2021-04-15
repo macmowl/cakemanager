@@ -52,12 +52,14 @@ const Cakes = ({ user, cakes }) => {
 export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
     if(session) {
-        const res = await fetch(process.env.URI + '/api/cakes');
-        const { data } = await res.json();
+        // const res = await fetch(process.env.URI + '/api/cakes');
+        // const { data } = await res.json();
         return {
             props: {
-                cakes: data,
-                user: session.user,
+                // cakes: data,
+                cakes: {},
+                // user: session.user,
+                user: {}
             }
         }
     } else {

@@ -23,11 +23,11 @@
     "react-dom": "17.0.1",
     "react-loading-skeleton": "^2.2.0",
     "react-moment": "^1.1.1",
+    "tailwindcss": "^2.1.1",
     "validator": "^13.5.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.8",
-    "tailwindcss": "^2.0.3"
+    "postcss": "^8.2.8"
   }
 }

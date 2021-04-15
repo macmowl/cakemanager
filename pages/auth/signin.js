@@ -1,4 +1,4 @@
-import { getCsrfToken } from 'next-auth/client';
+import { getSession, getCsrfToken } from 'next-auth/client';
 
 const SignIn = ({ csrfToken }) => {
   return (
@@ -37,6 +37,13 @@ const SignIn = ({ csrfToken }) => {
 }
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (session) {
+    ctx.res.writeHead(302, { Location: '/cakes'});
+    ctx.res.end()
+    return {}
+  }
+
   return {
     props: {
       csrfToken: await getCsrfToken(context)

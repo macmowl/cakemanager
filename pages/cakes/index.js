@@ -51,9 +51,8 @@ const Cakes = ({ user, cakes }) => {
 
 export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
-    const baseUrl = ctx.req ? `${ctx.req.protocol}://${ctx.req.get('Host')}` : '';
     if(session) {
-        const res = await fetch(`${baseUrl}/api/cakes`);
+        const res = await fetch(`${process.env.URI}/api/cakes`);
         const { data } = await res.json();
         return {
             props: {

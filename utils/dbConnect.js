@@ -7,7 +7,7 @@ async function dbConnect() {
         return;
     }
 
-    const db = await mongoose.connect(process.env.MONGODB_URI, {
+    const db = await mongoose.connect('mongodb+srv://macmowl:jpCsnwXqPI14l0Dg@cakecluster.dnwm1.mongodb.net/cakemanager?retryWrites=true&w=majority', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,

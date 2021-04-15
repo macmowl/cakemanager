@@ -160,7 +160,7 @@ const Cake = ({ cake }) => {
 
 export const getServerSideProps = async (ctx) => {
     
-    const resCake = await fetch(`${process.env.URI}/api/cakes/${ctx.query.cakeId}`);
+    const resCake = await fetch(`https://il-gelato.vercel.app/api/cakes/${ctx.query.cakeId}`);
     const { data } = await resCake.json();
     console.log(data)
     return {

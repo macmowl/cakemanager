@@ -10,12 +10,10 @@ const Index = () => {
   if (loading) return <Loading />
 
   if (session) router.push('/cakes')
+  if (!session) router.push('/auth/signin')
 
   return (
     <>
-      {!session && (
-        <Signin message="You are not signed in."/>
-      )}
     </>
   )
 }

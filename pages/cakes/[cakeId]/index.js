@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Moment from 'react-moment';
 import Modal from '../../../components/Modal';
 import { useRouter } from 'next/router';
+import apiUrl from "next-api-url";
 
 const Cake = ({ cake }) => {
     const router = useRouter();
@@ -159,7 +160,7 @@ const Cake = ({ cake }) => {
 }
 
 export const getServerSideProps = async (ctx) => {
-    const resCake = await fetch(`${NEXT_PUBLIC_URL}/api/cakes/${ctx.query.cakeId}`);
+    const resCake = await fetch(`${apiUrl(ctx)}/api/cakes/${ctx.query.cakeId}`);
     // const resCake = await fetch(`https://gelatoapp.vercel.app/api/cakes/${ctx.query.cakeId}`);
     NEXT_PUBLIC_URL
     const { data } = await resCake.json();

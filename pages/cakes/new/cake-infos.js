@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession, getSession } from "next-auth/client";
 import Loading from '../../../components/Loading';
+import apiUrl from "next-api-url";
 
 const CakeInfos = ({ client }) => {
     const [session, loading] = useSession();
@@ -162,7 +163,7 @@ export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
 
     if(session) {
-        const res = await fetch(`${NEXT_PUBLIC_URL}/api/query`, {
+        const res = await fetch(`${apiUrl(ctx)}/api/query`, {
         // const res = await fetch(`https://gelatoapp.vercel.app/api/query`, {
             method: 'POST',
             headers: {

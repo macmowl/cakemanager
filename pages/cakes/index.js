@@ -3,6 +3,7 @@ import CakeInfos from '../../components/Cake-infos';
 import { useRouter } from 'next/router';
 import { useSession, signOut, getSession } from "next-auth/client";
 import Loading from '../../components/Loading';
+import apiUrl from "next-api-url";
 
 
 const Cakes = ({ user, cakes }) => {
@@ -52,7 +53,7 @@ const Cakes = ({ user, cakes }) => {
 export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
     if(session) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cakes`);
+        const res = await fetch(`${apiUrl(ctx)}/api/cakes`);
         // const res = await fetch(`https://gelatoapp.vercel.app/api/cakes`);
         const { data } = await res.json();
         return {

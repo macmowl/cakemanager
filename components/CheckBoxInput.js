@@ -18,9 +18,6 @@ const CheckBoxInput = ({name, id, value, onChange, checked, children}) => {
 }
 
 CheckBoxInput.defaultProps = {
-    name: 'checkbox',
-    id: 'checkbox',
-    value: 'checkbox',
     children: 'I am a beautiful checkbox button'
 }
 

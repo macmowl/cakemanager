@@ -5,11 +5,11 @@ require('./Admin.model');
 const CakeSchema = new mongoose.Schema({
     nbrPersons: {
         type: Number,
-        required: true,
+        default: 6,
     },
     shape: {
         type: String,
-        required: true,
+        default: 'circle',
     },
     tastes: {
         type: [String],
@@ -17,6 +17,7 @@ const CakeSchema = new mongoose.Schema({
     },
     vegan: {
         type: Boolean,
+        default: false,
     },
     decoration: {
         type: [String],

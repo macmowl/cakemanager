@@ -14,7 +14,7 @@ const CakeInfos = ({ client }) => {
     const router = useRouter();
     const [ form, setForm ] = useState({
         client: client[0]._id,
-        creator: session.user.id
+        creator: session.user.id,
     });
     const [ nbrPers, setNbrPers ] = useState(0);
     const [ deco, setDeco ] = useState([]);
@@ -40,7 +40,6 @@ const CakeInfos = ({ client }) => {
         const date = delivery.date ? delivery.date : getToday()
         const time = delivery.time ? delivery.time : '14:00'
         const deliverydate = new Date(`${date} ${time}`)
-        console.log(deliverydate.getTime());
         setForm({
             ...form,
             nbrPersons: nbrPers,
@@ -82,6 +81,7 @@ const CakeInfos = ({ client }) => {
                     className="border-gray-400 border"
                     name="tastes"
                     onChange={handleChange}
+                    required
                 />
                 <div className="flex items-center w-full relative">
                     <div className="personContainer border-gray-400 border flex items-center relative">
@@ -142,6 +142,7 @@ const CakeInfos = ({ client }) => {
                             name="deliveryDate"
                             className="border-gray-400 border"
                             onChange={(e) => setDelivery({...delivery, date: e.target.value})}
+                            required
                         />
                         <input
                             type="time"
@@ -163,8 +164,7 @@ export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
 
     if(session) {
-        const res = await fetch(`${apiUrl(ctx)}/api/query`, {
-        // const res = await fetch(`https://gelatoapp.vercel.app/api/query`, {
+        const res = await fetch(`${apiUrl(ctx)}/query`, {
             method: 'POST',
             headers: {
                 'Accept': "application.json",

@@ -53,8 +53,7 @@ const Cakes = ({ user, cakes }) => {
 export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
     if(session) {
-        const res = await fetch(`${apiUrl(ctx)}/api/cakes`);
-        // const res = await fetch(`https://gelatoapp.vercel.app/api/cakes`);
+        const res = await fetch(`${apiUrl(ctx)}/cakes`);
         const { data } = await res.json();
         return {
             props: {

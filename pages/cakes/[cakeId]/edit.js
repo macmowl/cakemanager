@@ -169,8 +169,7 @@ export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx);
 
     if(session) {
-        // const res = await fetch(`https://gelatoapp.vercel.app/api/cakes/${ctx.query.cakeId}`);
-        const res = await fetch(`${apiUrl(ctx)}/api/cakes/${ctx.query.cakeId}`);
+        const res = await fetch(`${apiUrl(ctx)}/cakes/${ctx.query.cakeId}`);
         const { data } = await res.json();
 
         return {
